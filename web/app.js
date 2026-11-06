@@ -1,6 +1,7 @@
 // PyTalk LSF — application web (PWA)
 import { FilesetResolver, HandLandmarker, PoseLandmarker } from "./lib/mediapipe/vision_bundle.mjs";
 import { comparer, mainsActives, pointsImage } from "./comparaison.js";
+import { classerLettres, decrireLettre, decrireMain, scoreDepuisCout } from "./alphabet.js";
 
 const $ = (id) => document.getElementById(id);
 const CLE_PROGRES = "pytalk-lsf-progres";
@@ -9,6 +10,9 @@ const FIN_SANS_MAINS = 600;   // ms sans main levée qui terminent l'essai
 const DUREE_MIN = 1000;       // ms
 const DUREE_MAX = 6000;       // ms (allongée pour les signes longs)
 const SEUIL_REUSSI = 70;
+const CLE_ONGLET = "pytalk-lsf-onglet";
+const FENETRE_LETTRE = 400;   // ms de lissage du score en direct
+const TENUE_LETTRE = 700;     // ms à tenir la lettre pour la valider
 
 // Mode test : ?test=data/videos/xxx.mp4 remplace la caméra par une vidéo
 const params = new URLSearchParams(location.search);
@@ -16,6 +20,12 @@ const VIDEO_TEST = params.get("test");
 
 const etat = {
   mots: [],
+  lettres: [],
+  categorie: lireOnglet(),
+  type: "mot",         // mot | lettre (exercice ouvert)
+  suivi: [],           // lettre : [{ t, cout, plusProche }] des dernières images
+  debutTenue: 0,
+  meilleurTenue: 0,
   progres: chargerProgres(),
   detecteurs: null,
   mot: null,           // mot ouvert
@@ -23,7 +33,7 @@ const etat = {
   variante: 0,
   defi: false,
   aideVue: false,
-  phase: "pret",       // pret | compte | enregistrer | resultat
+  phase: "pret",       // pret | compte | enregistrer | direct (lettre) | resultat
   essai: [],
   debutEnregistrement: 0,
   derniereMain: 0,
@@ -47,6 +57,14 @@ function chargerProgres() {
   }
 }
 
+function lireOnglet() {
+  try {
+    return localStorage.getItem(CLE_ONGLET) === "alphabet" ? "alphabet" : "mots";
+  } catch {
+    return "mots";
+  }
+}
+
 function sauverProgres() {
   try {
     localStorage.setItem(CLE_PROGRES, JSON.stringify(etat.progres));
@@ -66,11 +84,21 @@ function afficher(id) {
   window.scrollTo(0, 0);
 }
 
+const elements = () => (etat.categorie === "alphabet" ? etat.lettres : etat.mots);
+
 function rendreAccueil() {
+  const alphabet = etat.categorie === "alphabet";
+  for (const onglet of document.querySelectorAll(".onglet")) {
+    onglet.setAttribute("aria-selected", String(onglet.dataset.categorie === etat.categorie));
+  }
+  $("lancer-defi").textContent = alphabet ? "🎲 Défi : une lettre au hasard" : "🎲 Défi : un signe au hasard";
+  $("nom-progres").textContent = alphabet ? "lettres réussies" : "signes réussis";
   const liste = $("liste-mots");
+  liste.classList.toggle("lettres", alphabet);
+  liste.setAttribute("aria-label", alphabet ? "Lettres" : "Signes");
   liste.replaceChildren();
-  for (const mot of etat.mots) {
-    const fiche = etat.progres[mot.cle];
+  for (const mot of elements()) {
+    const fiche = etat.progres[mot.cleProgres];
     const li = document.createElement("li");
     const bouton = document.createElement("button");
     bouton.className = "carte-mot" + (fiche?.meilleur >= SEUIL_REUSSI ? " reussi" : "");
@@ -79,18 +107,21 @@ function rendreAccueil() {
     nom.textContent = mot.nom;
     const info = document.createElement("span");
     info.className = "etat";
-    info.textContent = !fiche ? "Pas encore essayé"
+    info.textContent = alphabet ? (!fiche ? "–" : fiche.meilleur >= SEUIL_REUSSI ? "✓" : fiche.meilleur)
+      : !fiche ? "Pas encore essayé"
       : fiche.meilleur >= SEUIL_REUSSI ? `✓ Réussi · ${fiche.meilleur}`
       : `Meilleur : ${fiche.meilleur}`;
     bouton.append(nom, info);
-    bouton.addEventListener("click", () => ouvrirMot(mot, false));
+    if (alphabet) bouton.setAttribute("aria-label", `Lettre ${mot.nom}${fiche ? `, meilleur score ${fiche.meilleur}` : ""}`);
+    bouton.addEventListener("click", () => ouvrir(mot, false));
     li.append(bouton);
     liste.append(li);
   }
-  const reussis = etat.mots.filter((m) => etat.progres[m.cle]?.meilleur >= SEUIL_REUSSI).length;
+  const tous = elements();
+  const reussis = tous.filter((m) => etat.progres[m.cleProgres]?.meilleur >= SEUIL_REUSSI).length;
   $("nb-reussis").textContent = reussis;
-  $("nb-mots").textContent = etat.mots.length;
-  $("barre-progres").style.width = `${etat.mots.length ? (100 * reussis) / etat.mots.length : 0}%`;
+  $("nb-mots").textContent = tous.length;
+  $("barre-progres").style.width = `${tous.length ? (100 * reussis) / tous.length : 0}%`;
 }
 
 function rendreCredits() {
@@ -181,13 +212,13 @@ function boucle() {
   if (etat.detecteurs && video.readyState >= 2 && video.currentTime !== etat.derniereImage) {
     etat.derniereImage = video.currentTime;
     const maintenant = performance.now();
-    const pts = pointsImage(
-      etat.detecteurs.mains.detectForVideo(video, maintenant),
-      etat.detecteurs.corps.detectForVideo(video, maintenant),
-      video.videoWidth, video.videoHeight,
-    );
+    const resMains = etat.detecteurs.mains.detectForVideo(video, maintenant);
+    // Les lettres n'ont besoin que des mains : on économise la détection du corps.
+    const resCorps = etat.type === "lettre" ? null : etat.detecteurs.corps.detectForVideo(video, maintenant);
+    const pts = pointsImage(resMains, resCorps, video.videoWidth, video.videoHeight);
     if (etat.phase !== "resultat") dessinerCalque(pts, video.videoWidth, video.videoHeight);
     if (etat.phase === "enregistrer") enregistrer(pts, maintenant);
+    if (etat.phase === "direct") suivreLettre(resMains, video.videoWidth / video.videoHeight, maintenant);
   }
   requestAnimationFrame(boucle);
 }
@@ -242,7 +273,13 @@ async function chargerReferences(mot) {
   }));
 }
 
+function ouvrir(element, defi) {
+  if (element.cleProgres.startsWith("lettre-")) ouvrirLettre(element, defi);
+  else ouvrirMot(element, defi);
+}
+
 async function ouvrirMot(mot, defi) {
+  etat.type = "mot";
   etat.mot = mot;
   etat.defi = defi;
   etat.aideVue = false;
@@ -255,6 +292,7 @@ async function ouvrirMot(mot, defi) {
   passer("pret");
   majModele();
   $("action").disabled = true;
+  $("action").hidden = false;
   const [refs, cameraOk] = await Promise.all([chargerReferences(mot), demarrerCamera()]);
   if (etat.mot !== mot) return; // l'utilisateur est reparti entre-temps
   etat.refs = refs;
@@ -269,8 +307,102 @@ async function ouvrirMot(mot, defi) {
   majBoutonAction();
 }
 
+async function ouvrirLettre(lettre, defi) {
+  etat.type = "lettre";
+  etat.mot = lettre;
+  etat.defi = defi;
+  etat.aideVue = false;
+  etat.refs = [];
+  $("titre-mot").textContent = defi ? `Défi : lettre ${lettre.nom}` : `Lettre ${lettre.nom}`;
+  majBadge();
+  afficher("exercice");
+  if (history.state?.ecran !== "exercice") history.pushState({ ecran: "exercice" }, "");
+  passer("direct");
+  majModele();
+  const cameraOk = await demarrerCamera();
+  if (etat.mot !== lettre) return;
+  if (cameraOk) {
+    messageCamera("");
+    if (!etat.boucleActive) {
+      etat.boucleActive = true;
+      requestAnimationFrame(boucle);
+    }
+  }
+  verrouillerEcran();
+  majBoutonAction();
+}
+
+// Suivi en direct : on compare la main à toutes les lettres à chaque image.
+function suivreLettre(resMains, ratio, maintenant) {
+  const lettre = etat.mot;
+  let meilleur = null;
+  (resMains.landmarks ?? []).forEach((plan, i) => {
+    const monde = resMains.worldLandmarks?.[i];
+    if (!monde) return;
+    const main = decrireMain(monde.map((p) => [p.x, p.y, p.z]), plan.map((p) => [p.x * ratio, p.y]));
+    const classement = classerLettres(main, etat.lettres);
+    const cout = classement.find((c) => c.cle === lettre.cle).cout;
+    if (!meilleur || cout < meilleur.cout) meilleur = { t: maintenant, cout, plusProche: classement[0] };
+  });
+  etat.suivi = etat.suivi.filter((s) => maintenant - s.t < FENETRE_LETTRE);
+  if (!meilleur) {
+    etat.suivi = [];
+    etat.debutTenue = 0;
+    majJauge(0, "Montre ta main à la caméra.");
+    return;
+  }
+  etat.suivi.push(meilleur);
+  const couts = etat.suivi.map((s) => s.cout).sort((a, b) => a - b);
+  const score = scoreDepuisCout(couts[couts.length >> 1]);
+  // Une autre lettre ressemble nettement plus au geste ?
+  const autre = meilleur.plusProche.cle !== lettre.cle && meilleur.plusProche.cout < meilleur.cout - 0.03
+    ? etat.lettres.find((l) => l.cle === meilleur.plusProche.cle) : null;
+  if (score >= SEUIL_REUSSI && !autre) {
+    if (!etat.debutTenue) {
+      etat.debutTenue = maintenant;
+      etat.meilleurTenue = 0;
+    }
+    etat.meilleurTenue = Math.max(etat.meilleurTenue, score);
+    if (maintenant - etat.debutTenue >= TENUE_LETTRE) {
+      lettreReussie(etat.meilleurTenue);
+      return;
+    }
+    majJauge(score, "Parfait, garde la position…");
+    return;
+  }
+  etat.debutTenue = 0;
+  majJauge(score, autre ? `On dirait plutôt un ${autre.nom}. Regarde bien la photo.`
+    : score >= 45 ? "Presque ! Ajuste la position de tes doigts."
+    : "Forme la lettre comme sur la photo, paume face à la caméra.");
+}
+
+function majJauge(score, texte) {
+  const jauge = $("jauge-remplie");
+  jauge.style.width = `${score}%`;
+  jauge.className = `jauge-remplie ${couleurScore(score)}`;
+  $("consigne").textContent = texte;
+}
+
+function lettreReussie(score) {
+  console.log("[PyTalk] lettre réussie", etat.mot.cle, score);
+  noterProgres(score);
+  passer("resultat");
+  majModele();
+  majBadge();
+  afficherResultat({ score, conseils: [], miroir: false });
+}
+
+function noterProgres(score) {
+  const fiche = etat.progres[etat.mot.cleProgres] ?? { meilleur: 0, essais: 0 };
+  fiche.essais += 1;
+  fiche.meilleur = Math.max(fiche.meilleur, score);
+  fiche.dernier = score;
+  etat.progres[etat.mot.cleProgres] = fiche;
+  sauverProgres();
+}
+
 function majBadge() {
-  const fiche = etat.progres[etat.mot.cle];
+  const fiche = etat.progres[etat.mot.cleProgres];
   const badge = $("badge-meilleur");
   badge.hidden = !fiche;
   if (fiche) {
@@ -281,10 +413,28 @@ function majBadge() {
 
 function majModele() {
   const mot = etat.mot;
-  const variante = mot.variantes[etat.variante];
   const video = $("modele");
+  const photo = $("photo-lettre");
   const cache = etat.defi && !etat.aideVue && etat.phase !== "resultat";
+  const lettre = etat.type === "lettre";
   $("cache-defi").hidden = !cache;
+  $("cache-defi").querySelector("p").textContent = lettre ? `Te souviens-tu de la lettre ${mot.nom} ?` : "Te souviens-tu de ce signe ?";
+  $("voir-modele").textContent = lettre ? "Voir la photo" : "Voir la vidéo";
+  document.querySelector(".zone-modele").classList.toggle("photo", lettre);
+  video.hidden = lettre;
+  photo.hidden = !lettre;
+  if (lettre) {
+    video.pause();
+    $("autre-version").hidden = true;
+    $("credit").textContent = cache ? "" : `Photo : ${mot.auteur} — ${mot.licence} — Wikimedia Commons`;
+    if (!photo.src.endsWith(mot.image)) {
+      photo.src = mot.image;
+      photo.alt = `Main formant la lettre ${mot.nom} en LSF`;
+    }
+    photo.style.visibility = cache ? "hidden" : "visible";
+    return;
+  }
+  const variante = mot.variantes[etat.variante];
   $("credit").textContent = cache ? "" : `Vidéo : ${variante.auteur} — ${variante.licence} — Wikimedia Commons`;
   $("autre-version").hidden = cache || mot.variantes.length < 2;
   $("autre-version").textContent = `Version ${etat.variante + 1}/${mot.variantes.length} ↻`;
@@ -297,7 +447,15 @@ function majBoutonAction() {
   const pret = Boolean(etat.detecteurs && etat.refs.length && (etat.flux || VIDEO_TEST));
   const action = $("action");
   const consigne = $("consigne");
-  if (etat.phase === "pret") {
+  action.hidden = etat.phase === "direct";
+  if (etat.phase === "direct") {
+    if (!etat.detecteurs) consigne.textContent = "Préparation de la détection…";
+    else if (!etat.suivi.length) {
+      consigne.textContent = etat.mot.mouvement
+        ? `Forme la lettre avec ta main. ${etat.mot.mouvement}`
+        : "Forme la lettre avec ta main, face à la caméra.";
+    }
+  } else if (etat.phase === "pret") {
     action.textContent = "Essayer";
     action.disabled = !pret;
     consigne.textContent = !etat.detecteurs ? "Préparation de la détection…"
@@ -320,6 +478,12 @@ function passer(phase) {
   $("compte").hidden = phase !== "compte";
   $("enregistrement").hidden = phase !== "enregistrer";
   $("panneau").hidden = phase === "resultat";
+  $("jauge").hidden = phase !== "direct";
+  if (phase === "direct") {
+    etat.suivi = [];
+    etat.debutTenue = 0;
+    $("jauge-remplie").style.width = "0";
+  }
   $("resultat").hidden = phase !== "resultat";
   const resultat = phase === "resultat";
   $("camera").hidden = resultat && !$("replay").hidden;
@@ -367,13 +531,7 @@ function noter() {
   resultats.forEach((r, i) => { if (r.score > resultats[meilleur].score) meilleur = i; });
   const resultat = resultats[meilleur];
   console.log("[PyTalk] résultat", etat.mot.cle, JSON.stringify({ ...resultat, images: etat.essai.length, fps: Math.round(fpsEssai) }));
-
-  const fiche = etat.progres[etat.mot.cle] ?? { meilleur: 0, essais: 0 };
-  fiche.essais += 1;
-  fiche.meilleur = Math.max(fiche.meilleur, resultat.score);
-  fiche.dernier = resultat.score;
-  etat.progres[etat.mot.cle] = fiche;
-  sauverProgres();
+  noterProgres(resultat.score);
 
   etat.variante = meilleur;
   arreterReplay();
@@ -387,7 +545,8 @@ function afficherResultat(r) {
   const score = $("score");
   score.textContent = r.score;
   score.className = `score ${couleurScore(r.score)}`;
-  $("appreciation").textContent = r.score >= 85 ? "Excellent !"
+  $("appreciation").textContent = etat.type === "lettre" ? (r.score >= 85 ? "Excellent !" : "Lettre réussie !")
+    : r.score >= 85 ? "Excellent !"
     : r.score >= SEUIL_REUSSI ? "Bien joué !"
     : r.score >= 45 ? "Presque, continue !"
     : "Pas encore, réessaie.";
@@ -439,6 +598,7 @@ function quitterExercice() {
   if (etat.enregistreur?.state === "recording") etat.enregistreur.stop();
   etat.phase = "pret";
   etat.mot = null;
+  etat.type = "mot";
   arreterCamera();
   $("modele").pause();
   $("replay").pause();
@@ -447,17 +607,18 @@ function quitterExercice() {
   afficher("accueil");
 }
 
-function motAuHasard() {
-  const poids = etat.mots.map((m) => {
-    const meilleur = etat.progres[m.cle]?.meilleur;
+function auHasard(liste, sauf) {
+  const candidats = liste.length > 1 ? liste.filter((m) => m !== sauf) : liste;
+  const poids = candidats.map((m) => {
+    const meilleur = etat.progres[m.cleProgres]?.meilleur;
     return meilleur === undefined ? 100 : 110 - meilleur;
   });
   let tirage = Math.random() * poids.reduce((a, b) => a + b, 0);
-  for (let i = 0; i < etat.mots.length; i++) {
+  for (let i = 0; i < candidats.length; i++) {
     tirage -= poids[i];
-    if (tirage <= 0) return etat.mots[i];
+    if (tirage <= 0) return candidats[i];
   }
-  return etat.mots[etat.mots.length - 1];
+  return candidats[candidats.length - 1];
 }
 
 // ----- garder l'écran allumé pendant l'exercice
@@ -483,13 +644,14 @@ $("action").addEventListener("click", () => {
   else if (etat.phase === "enregistrer") noter();
 });
 $("reessayer").addEventListener("click", () => {
-  passer("pret");
+  passer(etat.type === "lettre" ? "direct" : "pret");
   majModele();
   $("zone-camera").scrollIntoView({ behavior: "smooth", block: "center" });
 });
 $("suivant").addEventListener("click", () => {
-  const i = etat.mots.indexOf(etat.mot);
-  ouvrirMot(etat.defi ? motAuHasard() : etat.mots[(i + 1) % etat.mots.length], etat.defi);
+  const liste = etat.type === "lettre" ? etat.lettres : etat.mots;
+  const i = liste.indexOf(etat.mot);
+  ouvrir(etat.defi ? auHasard(liste, etat.mot) : liste[(i + 1) % liste.length], etat.defi);
 });
 $("voir-modele").addEventListener("click", () => {
   etat.aideVue = true;
@@ -505,7 +667,18 @@ window.addEventListener("popstate", () => {
   if ($("exercice").classList.contains("actif")) quitterExercice();
   else if ($("apropos").classList.contains("actif")) afficher("accueil");
 });
-$("lancer-defi").addEventListener("click", () => etat.mots.length && ouvrirMot(motAuHasard(), true));
+$("lancer-defi").addEventListener("click", () => elements().length && ouvrir(auHasard(elements()), true));
+for (const onglet of document.querySelectorAll(".onglet")) {
+  onglet.addEventListener("click", () => {
+    etat.categorie = onglet.dataset.categorie;
+    try {
+      localStorage.setItem(CLE_ONGLET, etat.categorie);
+    } catch {
+      /* stockage indisponible */
+    }
+    rendreAccueil();
+  });
+}
 $("ouvrir-apropos").addEventListener("click", () => {
   history.pushState({ ecran: "apropos" }, "");
   afficher("apropos");
@@ -539,8 +712,12 @@ async function demarrer() {
   if ("serviceWorker" in navigator && !VIDEO_TEST) {
     navigator.serviceWorker.register("sw.js").catch((e) => console.warn("[PyTalk] service worker", e));
   }
-  const reponse = await fetch("data/mots.json");
-  etat.mots = (await reponse.json()).sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+  const [mots, lettres] = await Promise.all([
+    fetch("data/mots.json").then((r) => r.json()),
+    fetch("data/alphabet.json").then((r) => r.json()).catch(() => []),
+  ]);
+  etat.mots = mots.sort((a, b) => a.nom.localeCompare(b.nom, "fr")).map((m) => ({ ...m, cleProgres: m.cle }));
+  etat.lettres = lettres.map((l) => ({ ...l, cleProgres: `lettre-${l.cle}`, descripteurs: decrireLettre(l) }));
   rendreAccueil();
   rendreCredits();
   const statut = $("etat-chargement");

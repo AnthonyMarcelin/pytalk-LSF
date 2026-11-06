@@ -46,6 +46,12 @@ Le mode Apprendre fonctionne directement dans le navigateur du téléphone, sans
 
 Sur **Android**, ouvre le lien dans Chrome, puis menu ⋮ → **« Ajouter à l'écran d'accueil »** (ou **« Installer l'application »**).
 
+### L'alphabet
+
+L'onglet **Alphabet** propose les 26 lettres de la dactylologie LSF. Choisis une lettre, forme-la avec ta main face à la caméra et garde la position : une jauge se remplit en direct, et la lettre est validée quand tu la tiens environ une seconde. Si ta main ressemble davantage à une autre lettre, l'app te le dit (« On dirait plutôt un U »). Le mode Défi existe aussi pour les lettres.
+
+Pour J, Z, P et Q, l'app vérifie seulement la forme de la main, pas le mouvement.
+
 ### Bon à savoir
 
 - **Le premier lancement télécharge environ 25 Mo** (la détection MediaPipe et ses modèles). Ensuite, l'app et les signes déjà ouverts marchent **hors connexion**.
@@ -58,6 +64,7 @@ Sur **Android**, ouvre le lien dans Chrome, puis menu ⋮ → **« Ajouter à l'
 L'app web se trouve dans le dossier [`web/`](web). C'est du HTML/CSS/JavaScript sans framework :
 
 - **`app.js`** : l'interface, la caméra et l'enregistrement.
+- **`alphabet.js`** : la reconnaissance des lettres. Il compare le pliage des doigts (en 3D), les contacts avec le pouce, l'écart et le croisement des doigts, et la direction de la main, à toutes les lettres à chaque image.
 - **`comparaison.js`** : la traduction exacte de `src/comparaison.py`, avec les mêmes scores à 0,0001 près, vérifié sur 400 comparaisons. Seuls les seuils du score sont un peu plus indulgents, parce que les modèles web donnent des coûts légèrement plus élevés.
 - **MediaPipe Tasks Vision 0.10.21** (mains + corps) est inclus dans `web/lib/`, avec ses modèles dans `web/models/`.
 - **`sw.js`** : un *service worker* qui garde l'app en cache pour le hors ligne.
@@ -73,6 +80,8 @@ python web/preparer.py                   # convertit les vidéos en MP4 et calcu
 ```
 
 Change ensuite `VERSION` dans `web/sw.js` (par exemple `pytalk-lsf-v2`) pour que les téléphones récupèrent la mise à jour, puis commit et push.
+
+L'alphabet est préparé par `python web/preparer_alphabet.py`. Ce script télécharge les photos et détecte chaque main à plusieurs tailles, parce que la détection varie un peu sur ces petites images. Il écrit `web/data/alphabet.json` et `web/data/alphabet/`.
 
 `preparer.py` calcule les points avec **les mêmes modèles que le téléphone** (`web/models/`), pour que les scores soient comparables.
 
@@ -317,9 +326,10 @@ pytalk-LSF/
 ├── requirements-apprendre.txt  dépendances du seul mode Apprendre (sans TensorFlow)
 ├── .github/workflows/pages.yml publication de l'app web sur GitHub Pages
 ├── web/                        app web / PWA (version téléphone)
-│   ├── index.html, style.css, app.js, comparaison.js, sw.js, manifest.webmanifest
+│   ├── index.html, style.css, app.js, comparaison.js, alphabet.js, sw.js, manifest.webmanifest
 │   ├── preparer.py             prépare les mots pour le web (MP4 + points)
-│   ├── data/                   mots, vidéos MP4 et points des 20 mots de départ
+│   ├── preparer_alphabet.py    prépare l'alphabet (photos + points des mains)
+│   ├── data/                   mots, vidéos MP4 et points des 20 mots de départ, alphabet
 │   ├── lib/mediapipe/          MediaPipe Tasks Vision 0.10.21 (Apache 2.0)
 │   └── models/                 modèles MediaPipe mains + corps
 └── src/
@@ -354,6 +364,7 @@ Les vidéos téléchargées (`src/refs/`) et ta progression (`src/progres.json`)
   - [Elix, le dictionnaire vivant en langue des signes](https://elix-lsf.fr/) (association Signes de sens) — CC BY-SA 4.0 ;
   - Laura Jauvert (montage : Edouard-lopez) — CC BY 3.0 ;
   - les contributeurs et contributrices de [Lingua Libre](https://lingualibre.org/) — CC0 ou CC BY.
+- **Photos de l'alphabet** (`web/data/alphabet/`) : **Clairette**, CC BY-SA 3.0, catégorie [French manual alphabet](https://commons.wikimedia.org/wiki/Category:French_manual_alphabet) de Wikimedia Commons.
 - **Captures d'écran** de ce README : elles contiennent des images de vidéos de Laura Jauvert (CC BY 3.0, Wikimedia Commons).
 - **Projet d'origine** : [EliotCassidy/PyTalk](https://github.com/EliotCassidy/PyTalk), par Eliot CASSIDY et Antonin JOUVE — GPL v3+.
 
@@ -366,4 +377,5 @@ Un grand merci à **Eliot CASSIDY et Antonin JOUVE**, les auteurs de [PyTalk](ht
 Merci aussi :
 - aux personnes qu'ils remerciaient eux-mêmes : les organisateurs des Trophées NSI, leurs professeurs de NSI et les ami·es qui leur ont fait des retours ;
 - à [Elix](https://elix-lsf.fr/), à Laura Jauvert et aux contributeurs et contributrices de [Lingua Libre](https://lingualibre.org/), qui ont publié des vidéos de LSF sous licence libre sur Wikimedia Commons : le mode Apprendre repose entièrement sur leur travail ;
+- à Clairette, pour ses photos de l'alphabet LSF sur Wikimedia Commons ;
 - à l'équipe de [MediaPipe](https://developers.google.com/mediapipe) (Google) pour la détection des mains et du corps.

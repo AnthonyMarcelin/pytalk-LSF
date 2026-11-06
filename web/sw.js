@@ -1,6 +1,6 @@
 // PyTalk LSF — service worker : l'app fonctionne hors ligne une fois ouverte.
 // Change VERSION à chaque mise à jour pour que les téléphones la récupèrent.
-const VERSION = "pytalk-lsf-v2";
+const VERSION = "pytalk-lsf-v3";
 
 const COQUILLE = [
   "./",
@@ -8,6 +8,7 @@ const COQUILLE = [
   "style.css",
   "app.js",
   "comparaison.js",
+  "alphabet.js",
   "manifest.webmanifest",
   "icons/icon-192.png",
   "icons/icon-512.png",
@@ -18,6 +19,7 @@ const COQUILLE = [
   "models/hand_landmarker.task",
   "models/pose_landmarker_lite.task",
   "data/mots.json",
+  "data/alphabet.json",
 ];
 
 self.addEventListener("install", (event) => {

@@ -28,8 +28,13 @@
     </header>
 
     <div class="progres-global">
-      <div class="progres-texte"><strong id="nb-reussis">0</strong> / <span id="nb-mots">0</span> signes réussis</div>
+      <div class="progres-texte"><strong id="nb-reussis">0</strong> / <span id="nb-mots">0</span> <span id="nom-progres">signes réussis</span></div>
       <div class="barre"><div class="barre-remplie" id="barre-progres"></div></div>
+    </div>
+
+    <div class="onglets" role="tablist" aria-label="Catégorie">
+      <button role="tab" class="onglet" id="onglet-mots" data-categorie="mots" aria-selected="true">Signes</button>
+      <button role="tab" class="onglet" id="onglet-alphabet" data-categorie="alphabet" aria-selected="false">Alphabet</button>
     </div>
 
     <button class="bouton principal large" id="lancer-defi">🎲 Défi : un signe au hasard</button>
@@ -49,10 +54,11 @@
 
     <div class="zone-modele">
       <video id="modele" muted playsinline loop preload="auto"></video>
+      <img id="photo-lettre" alt="" hidden>
       <div class="cache-defi" id="cache-defi" hidden>
         <span class="point-interrogation">?</span>
         <p>Te souviens-tu de ce signe ?</p>
-        <button class="bouton secondaire" id="voir-modele">Voir la vidéo</button>
+        <button class="bouton secondaire" id="voir-modele">Voir le modèle</button>
       </div>
       <span class="etiquette">Modèle</span>
       <button class="etiquette bouton-version" id="autre-version" hidden>Autre version ↻</button>
@@ -72,6 +78,7 @@
     </div>
 
     <div class="panneau" id="panneau">
+      <div class="jauge" id="jauge" hidden><div class="jauge-remplie" id="jauge-remplie"></div></div>
       <p class="consigne" id="consigne">Regarde le modèle, puis essaie.</p>
       <button class="bouton principal large" id="action">Essayer</button>
     </div>
@@ -106,6 +113,7 @@
         <li>Tu obtiens un score sur 100 et des conseils. À partir de 70, le signe est réussi.</li>
       </ol>
       <p>Pour que ça marche bien : pose le téléphone (ou tiens-le à bout de bras), garde les <strong>épaules et les mains dans l'image</strong>, avec de la lumière de face. Tu peux signer avec ta main dominante, droitière ou gauchère.</p>
+      <p>Dans l'onglet <strong>Alphabet</strong>, forme la lettre avec ta main face à la caméra et garde la position : la jauge se remplit en direct, et la lettre est validée quand tu la tiens un instant. Pour J, Z, P et Q, seule la forme de la main est vérifiée, pas le mouvement.</p>
       <p>Le mode <strong>Défi</strong> te propose un signe au hasard sans la vidéo : les signes ratés reviennent plus souvent.</p>
       <p class="discret">L'app compare la position et la forme de tes mains à celles du modèle. Elle ne juge pas les expressions du visage, très importantes en LSF : c'est un outil d'entraînement, pas un cours. Pour aller plus loin : <a href="https://elix-lsf.fr/" target="_blank" rel="noopener">le dictionnaire Elix</a>.</p>
       <p class="discret">Tout se passe sur le téléphone : aucune image de la caméra n'est envoyée sur internet. Tes scores restent dans ce téléphone.</p>
@@ -113,6 +121,7 @@
       <h3>Vidéos des signes</h3>
       <p class="discret">Publiées sous licence libre sur <a href="https://commons.wikimedia.org/wiki/Category:Videos_of_French_Sign_Language" target="_blank" rel="noopener">Wikimedia Commons</a>. Merci à leurs auteurs :</p>
       <ul class="credits" id="liste-credits"></ul>
+      <p class="discret">Photos de l'alphabet : <strong>Clairette</strong>, licence CC BY-SA, <a href="https://commons.wikimedia.org/wiki/Category:French_manual_alphabet" target="_blank" rel="noopener">sur Wikimedia Commons</a>.</p>
 
       <h3>Remerciements</h3>
       <p>PyTalk LSF est la suite de <a href="https://github.com/EliotCassidy/PyTalk" target="_blank" rel="noopener">PyTalk</a>, créé par <strong>Eliot CASSIDY et Antonin JOUVE</strong> pour les Trophées NSI 2022. Merci à eux !</p>
