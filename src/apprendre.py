@@ -146,6 +146,15 @@ def dessiner_mains(image, pts):
 
 def dessiner_resultats(image, resultats):
     d, s = mp.solutions.drawing_utils, mp.solutions.drawing_styles
+    if resultats.pose_landmarks:
+        # Les épaules servent de repère pour la comparaison : on les montre.
+        h, w = image.shape[:2]
+        epaules = [resultats.pose_landmarks.landmark[i] for i in (11, 12)]
+        if min(e.visibility for e in epaules) > 0.5:
+            a, b = ((int(e.x * w), int(e.y * h)) for e in epaules)
+            cv2.line(image, a, b, (80, 220, 120), 3, cv2.LINE_AA)
+            for c in (a, b):
+                cv2.circle(image, c, 7, (80, 220, 120), -1, cv2.LINE_AA)
     for main in (resultats.left_hand_landmarks, resultats.right_hand_landmarks):
         if main:
             d.draw_landmarks(image, main, mp.solutions.holistic.HAND_CONNECTIONS,

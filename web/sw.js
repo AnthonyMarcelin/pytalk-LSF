@@ -1,6 +1,6 @@
 // PyTalk LSF — service worker : l'app fonctionne hors ligne une fois ouverte.
 // Change VERSION à chaque mise à jour pour que les téléphones la récupèrent.
-const VERSION = "pytalk-lsf-v1";
+const VERSION = "pytalk-lsf-v2";
 
 const COQUILLE = [
   "./",

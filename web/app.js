@@ -201,6 +201,16 @@ function dessinerCalque(pts, largeur, hauteur) {
   if (calque.height !== hauteur) calque.height = hauteur;
   const ctx = calque.getContext("2d");
   ctx.clearRect(0, 0, largeur, hauteur);
+  // Les épaules servent de repère pour la comparaison : on les montre.
+  if (pts[0] && pts[1]) {
+    const [a, b] = [pts[0], pts[1]].map(([x, y]) => [x * hauteur, y * hauteur]);
+    ctx.strokeStyle = ctx.fillStyle = "#50dc78";
+    ctx.lineWidth = Math.max(3, largeur / 120);
+    ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke();
+    for (const [x, y] of [a, b]) {
+      ctx.beginPath(); ctx.arc(x, y, Math.max(5, largeur / 70), 0, Math.PI * 2); ctx.fill();
+    }
+  }
   for (const [debut, couleur] of [[2, "#f542e6"], [23, "#4296f5"]]) {
     if (!pts[debut]) continue;
     const p = (i) => [pts[debut + i][0] * hauteur, pts[debut + i][1] * hauteur];
