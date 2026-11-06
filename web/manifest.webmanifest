@@ -1,0 +1,17 @@
+{
+  "name": "PyTalk LSF — apprendre la langue des signes",
+  "short_name": "PyTalk LSF",
+  "description": "Apprendre la langue des signes française avec la caméra de son téléphone.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2b2c35",
+  "theme_color": "#2b2c35",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,402 @@
+[
+ {
+  "cle": "aider",
+  "nom": "Aider",
+  "variantes": [
+   {
+    "video": "data/videos/LSF_Vocab_aider.mp4",
+    "points": "data/points/LSF_Vocab_aider.json",
+    "auteur": "auteur : voir la page Commons",
+    "licence": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALSF_Vocab_aider.ogv",
+    "source": "Commons"
+   }
+  ]
+ },
+ {
+  "cle": "apprendre",
+  "nom": "Apprendre",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Apprendre.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Apprendre.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Apprendre.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "au revoir",
+  "nom": "Au revoir",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Au_revoir.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Au_revoir.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Au_revoir.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-au_revoir.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-au_revoir.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-au_revoir.webm",
+    "source": "Lingua Libre"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Taliba31-au_revoir.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Taliba31-au_revoir.json",
+    "auteur": "Speaker: Taliba31 Recorder: Taliba31",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Taliba31-au_revoir.webm",
+    "source": "Lingua Libre"
+   }
+  ]
+ },
+ {
+  "cle": "bien",
+  "nom": "Bien",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Bien.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Bien.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Bien.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "boire",
+  "nom": "Boire",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Boire.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Boire.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Boire.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "bonjour",
+  "nom": "Bonjour",
+  "variantes": [
+   {
+    "video": "data/videos/Bonjour_Nm_1_1_1_-_Elix.mp4",
+    "points": "data/points/Bonjour_Nm_1_1_1_-_Elix.json",
+    "auteur": "Elix, le dictionnaire vivant en langue des signes",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABonjour_Nm_1_1_1_-_Elix.webm",
+    "source": "Elix"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Bonjour.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Bonjour.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Bonjour.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-bonjour.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-bonjour.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-bonjour.webm",
+    "source": "Lingua Libre"
+   }
+  ]
+ },
+ {
+  "cle": "bonsoir",
+  "nom": "Bonsoir",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Bonsoir.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Bonsoir.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Bonsoir.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "comprendre",
+  "nom": "Comprendre",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Comprendre.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Comprendre.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Comprendre.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "de rien",
+  "nom": "De rien",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-De_rien.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-De_rien.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-De_rien.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-de_rien.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-de_rien.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-de_rien.webm",
+    "source": "Lingua Libre"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Taliba31-de_rien.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Taliba31-de_rien.json",
+    "auteur": "Speaker: Taliba31 Recorder: Taliba31",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Taliba31-de_rien.webm",
+    "source": "Lingua Libre"
+   }
+  ]
+ },
+ {
+  "cle": "eau",
+  "nom": "Eau",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Eau.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Eau.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Eau.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "famille",
+  "nom": "Famille",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Famille.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Famille.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Famille.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "maison",
+  "nom": "Maison",
+  "variantes": [
+   {
+    "video": "data/videos/Maison.mp4",
+    "points": "data/points/Maison.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMaison.webm",
+    "source": "Commons"
+   }
+  ]
+ },
+ {
+  "cle": "manger",
+  "nom": "Manger",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-manger.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-manger.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-manger.webm",
+    "source": "Lingua Libre"
+   },
+   {
+    "video": "data/videos/Manger.mp4",
+    "points": "data/points/Manger.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3AManger.webm",
+    "source": "Commons"
+   }
+  ]
+ },
+ {
+  "cle": "merci",
+  "nom": "Merci",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Merci.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Merci.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Merci.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-merci.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-merci.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-merci.webm",
+    "source": "Lingua Libre"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Taliba31-merci.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Taliba31-merci.json",
+    "auteur": "Speaker: Taliba31 Recorder: Taliba31",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Taliba31-merci.webm",
+    "source": "Lingua Libre"
+   }
+  ]
+ },
+ {
+  "cle": "non",
+  "nom": "Non",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Non.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Non.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Non.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "oui",
+  "nom": "Oui",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Oui.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Oui.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Oui.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-oui.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-oui.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-oui.webm",
+    "source": "Lingua Libre"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Taliba31-oui.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Taliba31-oui.json",
+    "auteur": "Speaker: Taliba31 Recorder: Taliba31",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Taliba31-oui.webm",
+    "source": "Lingua Libre"
+   }
+  ]
+ },
+ {
+  "cle": "pardon",
+  "nom": "Pardon",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Pardon.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Pardon.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Pardon.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-pardon.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-pardon.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-pardon.webm",
+    "source": "Lingua Libre"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Taliba31-pardon.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Taliba31-pardon.json",
+    "auteur": "Speaker: Taliba31 Recorder: Taliba31",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Taliba31-pardon.webm",
+    "source": "Lingua Libre"
+   }
+  ]
+ },
+ {
+  "cle": "pourquoi",
+  "nom": "Pourquoi ?",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Pourquoi_.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Pourquoi_.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Pourquoi_%3F.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Pourquoi.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Pourquoi.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Pourquoi.webm",
+    "source": "Laura Jauvert"
+   },
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Hugo_en_r_sidence-pourquoi.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Hugo_en_r_sidence-pourquoi.json",
+    "auteur": "Speaker: Hugo en résidence Recorder: Hugo en résidence",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-pourquoi.webm",
+    "source": "Lingua Libre"
+   }
+  ]
+ },
+ {
+  "cle": "sourd",
+  "nom": "Sourd",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-Sourd.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-Sourd.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-Sourd.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ },
+ {
+  "cle": "ca va",
+  "nom": "Ça va",
+  "variantes": [
+   {
+    "video": "data/videos/LL-Q33302_fsl_-Laura_Jauvert-_a_va.mp4",
+    "points": "data/points/LL-Q33302_fsl_-Laura_Jauvert-_a_va.json",
+    "auteur": "Original video: Jauvert Laura, Video editing: Edouard-lopez",
+    "licence": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALL-Q33302_%28fsl%29-Laura_Jauvert-%C3%87a_va.webm",
+    "source": "Laura Jauvert"
+   }
+  ]
+ }
+]

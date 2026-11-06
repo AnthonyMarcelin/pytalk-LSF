@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PyTalk LSF</title>
+  <meta name="description" content="Apprendre la langue des signes française avec la caméra de son téléphone.">
+  <meta name="theme-color" content="#2b2c35">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PyTalk LSF">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Accueil ===== -->
+  <section id="accueil" class="ecran actif" aria-labelledby="titre-accueil">
+    <header class="entete">
+      <div>
+        <h1 id="titre-accueil">PyTalk <span class="accent">LSF</span></h1>
+        <p class="sous-titre">Apprends la langue des signes avec ta caméra</p>
+      </div>
+      <button class="bouton-rond" id="ouvrir-apropos" aria-label="À propos et aide">?</button>
+    </header>
+
+    <div class="progres-global">
+      <div class="progres-texte"><strong id="nb-reussis">0</strong> / <span id="nb-mots">0</span> signes réussis</div>
+      <div class="barre"><div class="barre-remplie" id="barre-progres"></div></div>
+    </div>
+
+    <button class="bouton principal large" id="lancer-defi">🎲 Défi : un signe au hasard</button>
+
+    <ul class="grille-mots" id="liste-mots" aria-label="Signes"></ul>
+
+    <p class="discret centre" id="etat-chargement">Préparation de la détection…</p>
+  </section>
+
+  <!-- ===== Exercice ===== -->
+  <section id="exercice" class="ecran" aria-labelledby="titre-mot">
+    <header class="entete compacte">
+      <button class="bouton-rond" id="retour" aria-label="Retour">‹</button>
+      <h2 id="titre-mot">Mot</h2>
+      <span class="badge" id="badge-meilleur" hidden></span>
+    </header>
+
+    <div class="zone-modele">
+      <video id="modele" muted playsinline loop preload="auto"></video>
+      <div class="cache-defi" id="cache-defi" hidden>
+        <span class="point-interrogation">?</span>
+        <p>Te souviens-tu de ce signe ?</p>
+        <button class="bouton secondaire" id="voir-modele">Voir la vidéo</button>
+      </div>
+      <span class="etiquette">Modèle</span>
+      <button class="etiquette bouton-version" id="autre-version" hidden>Autre version ↻</button>
+    </div>
+    <p class="credit" id="credit"></p>
+
+    <div class="zone-camera" id="zone-camera">
+      <div class="miroir">
+        <video id="camera" muted playsinline autoplay></video>
+        <video id="replay" muted playsinline loop hidden></video>
+        <canvas id="calque"></canvas>
+      </div>
+      <span class="etiquette">Toi</span>
+      <div class="superposition" id="compte" hidden></div>
+      <div class="enregistrement" id="enregistrement" hidden><span class="point-rouge"></span> Signe !</div>
+      <div class="message-camera" id="message-camera" hidden></div>
+    </div>
+
+    <div class="panneau" id="panneau">
+      <p class="consigne" id="consigne">Regarde le modèle, puis essaie.</p>
+      <button class="bouton principal large" id="action">Essayer</button>
+    </div>
+
+    <div class="resultat" id="resultat" hidden>
+      <div class="score-ligne">
+        <span class="score" id="score">0</span><span class="sur">/100</span>
+        <span class="appreciation" id="appreciation"></span>
+      </div>
+      <ul class="conseils" id="conseils"></ul>
+      <p class="discret petit" id="note-miroir" hidden>Comparé en miroir : tu as signé avec l'autre main, c'est accepté.</p>
+      <div class="boutons">
+        <button class="bouton principal" id="reessayer">Réessayer</button>
+        <button class="bouton secondaire" id="suivant">Mot suivant ›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== À propos ===== -->
+  <section id="apropos" class="ecran" aria-labelledby="titre-apropos">
+    <header class="entete compacte">
+      <button class="bouton-rond" id="fermer-apropos" aria-label="Retour">‹</button>
+      <h2 id="titre-apropos">Aide et crédits</h2>
+      <span></span>
+    </header>
+    <div class="texte">
+      <h3>Comment ça marche</h3>
+      <ol>
+        <li>Choisis un signe et regarde la vidéo du modèle.</li>
+        <li>Appuie sur <strong>Essayer</strong> : après le compte à rebours, fais le signe face à la caméra.</li>
+        <li>Baisse les mains quand tu as fini : l'enregistrement s'arrête tout seul.</li>
+        <li>Tu obtiens un score sur 100 et des conseils. À partir de 70, le signe est réussi.</li>
+      </ol>
+      <p>Pour que ça marche bien : pose le téléphone (ou tiens-le à bout de bras), garde les <strong>épaules et les mains dans l'image</strong>, avec de la lumière de face. Tu peux signer avec ta main dominante, droitière ou gauchère.</p>
+      <p>Le mode <strong>Défi</strong> te propose un signe au hasard sans la vidéo : les signes ratés reviennent plus souvent.</p>
+      <p class="discret">L'app compare la position et la forme de tes mains à celles du modèle. Elle ne juge pas les expressions du visage, très importantes en LSF : c'est un outil d'entraînement, pas un cours. Pour aller plus loin : <a href="https://elix-lsf.fr/" target="_blank" rel="noopener">le dictionnaire Elix</a>.</p>
+      <p class="discret">Tout se passe sur le téléphone : aucune image de la caméra n'est envoyée sur internet. Tes scores restent dans ce téléphone.</p>
+
+      <h3>Vidéos des signes</h3>
+      <p class="discret">Publiées sous licence libre sur <a href="https://commons.wikimedia.org/wiki/Category:Videos_of_French_Sign_Language" target="_blank" rel="noopener">Wikimedia Commons</a>. Merci à leurs auteurs :</p>
+      <ul class="credits" id="liste-credits"></ul>
+
+      <h3>Remerciements</h3>
+      <p>PyTalk LSF est la suite de <a href="https://github.com/EliotCassidy/PyTalk" target="_blank" rel="noopener">PyTalk</a>, créé par <strong>Eliot CASSIDY et Antonin JOUVE</strong> pour les Trophées NSI 2022. Merci à eux !</p>
+      <p class="discret">Détection des mains et du corps : <a href="https://developers.google.com/mediapipe" target="_blank" rel="noopener">MediaPipe</a> (Google, licence Apache 2.0). Code de l'app : licence GPL v3+, <a href="https://github.com/AnthonyMarcelin/pytalk-LSF" target="_blank" rel="noopener">sur GitHub</a>.</p>
+
+      <h3>Données</h3>
+      <button class="bouton secondaire" id="effacer-progres">Effacer mes scores</button>
+    </div>
+  </section>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

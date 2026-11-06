@@ -7,6 +7,8 @@ PyTalk filme ta webcam, repère tes mains et ton corps avec [MediaPipe](https://
 | **Apprendre** *(nouveau)* | Tu choisis un mot, une vidéo d'un vrai signeur te montre le signe, tu l'imites devant la caméra, et PyTalk te donne un **score sur 100** et des **conseils** (« monte ta main droite », « regarde la forme de ta main »…). Un mode **défi** te fait réviser les mots sans la vidéo. 756 mots sont disponibles. |
 | **Reconnaître** *(d'origine)* | Reconnaît en temps réel 3 signes : *bonjour*, *bonsoir* et *ça va*. |
 
+📱 **Sur téléphone, sans rien installer :** le mode Apprendre existe aussi en application web à ajouter sur l'écran d'accueil d'un iPhone ou d'un Android. Ouvre **https://anthonymarcelin.github.io/pytalk-LSF/** puis suis la section [Version téléphone](#version-téléphone-pwa).
+
 ![Mode Apprendre : le modèle à gauche, ton essai à droite, le score en bas](src/img/apprendre-resultat.png)
 <sub>Ici, « manger » a été signé à la place de « boire » : le score est mauvais. Vidéos : Laura Jauvert, montage Edouard-lopez, CC BY 3.0, Wikimedia Commons.</sub>
 
@@ -16,6 +18,7 @@ PyTalk filme ta webcam, repère tes mains et ton corps avec [MediaPipe](https://
 
 ## Sommaire
 
+- [Version téléphone (PWA)](#version-téléphone-pwa)
 - [Installation](#installation)
   - [macOS](#macos)
   - [Linux](#linux)
@@ -27,6 +30,53 @@ PyTalk filme ta webcam, repère tes mains et ton corps avec [MediaPipe](https://
 - [Structure du projet](#structure-du-projet)
 - [Licences et crédits](#licences-et-crédits)
 - [Remerciements](#remerciements)
+
+---
+
+## Version téléphone (PWA)
+
+Le mode Apprendre fonctionne directement dans le navigateur du téléphone, sans App Store et sans Python : **https://anthonymarcelin.github.io/pytalk-LSF/**
+
+### Installer sur iPhone
+
+1. Ouvre le lien dans **Safari** (pas dans Chrome ni dans l'aperçu d'une autre app).
+2. Appuie sur le bouton **Partager** (carré avec une flèche vers le haut).
+3. Choisis **« Sur l'écran d'accueil »**, puis **Ajouter**.
+4. Lance **PyTalk LSF** depuis l'écran d'accueil et autorise la caméra quand l'iPhone le demande.
+
+Sur **Android**, ouvre le lien dans Chrome, puis menu ⋮ → **« Ajouter à l'écran d'accueil »** (ou **« Installer l'application »**).
+
+### Bon à savoir
+
+- **Le premier lancement télécharge environ 25 Mo** (la détection MediaPipe et ses modèles). Ensuite, l'app et les signes déjà ouverts marchent **hors connexion**.
+- **Tout se passe sur le téléphone** : aucune image de la caméra n'est envoyée sur internet, et les scores restent dans le téléphone.
+- **Pour bien cadrer** : pose le téléphone debout (contre un livre, par exemple) à environ 1 m, avec les **épaules et les mains dans l'image** et de la lumière de face.
+- **Testé** dans Chrome sur Mac, avec une vidéo de référence à la place de la caméra. Il faut un iPhone récent : un iPhone 12 ou plus est recommandé (non testé sur un vrai iPhone pour l'instant).
+
+### Comment c'est fait
+
+L'app web se trouve dans le dossier [`web/`](web). C'est du HTML/CSS/JavaScript sans framework :
+
+- **`app.js`** : l'interface, la caméra et l'enregistrement.
+- **`comparaison.js`** : la traduction exacte de `src/comparaison.py`, avec les mêmes scores à 0,0001 près, vérifié sur 400 comparaisons. Seuls les seuils du score sont un peu plus indulgents, parce que les modèles web donnent des coûts légèrement plus élevés.
+- **MediaPipe Tasks Vision 0.10.21** (mains + corps) est inclus dans `web/lib/`, avec ses modèles dans `web/models/`.
+- **`sw.js`** : un *service worker* qui garde l'app en cache pour le hors ligne.
+
+Elle est publiée automatiquement sur GitHub Pages à chaque push qui modifie `web/` (`.github/workflows/pages.yml`).
+
+**Ajouter des mots à la version téléphone** (sur l'ordinateur, environnement virtuel activé) :
+
+```bash
+pip install imageio-ffmpeg               # une seule fois (convertit les vidéos pour l'iPhone)
+python src/references.py chat chien      # télécharge les nouveaux mots
+python web/preparer.py                   # convertit les vidéos en MP4 et calcule les points
+```
+
+Change ensuite `VERSION` dans `web/sw.js` (par exemple `pytalk-lsf-v2`) pour que les téléphones récupèrent la mise à jour, puis commit et push.
+
+`preparer.py` calcule les points avec **les mêmes modèles que le téléphone** (`web/models/`), pour que les scores soient comparables.
+
+**Tester sur l'ordinateur** : `cd web && python3 -m http.server 8000`, puis ouvre http://localhost:8000. Pour tester sans caméra, ajoute `?test=data/videos/<une vidéo>.mp4` à l'adresse : la vidéo remplace la caméra.
 
 ---
 
@@ -265,6 +315,13 @@ Un réseau de neurones LSTM (TensorFlow/Keras) reçoit les 20 dernières images 
 pytalk-LSF/
 ├── requirements.txt            dépendances complètes (Apprendre + Reconnaître)
 ├── requirements-apprendre.txt  dépendances du seul mode Apprendre (sans TensorFlow)
+├── .github/workflows/pages.yml publication de l'app web sur GitHub Pages
+├── web/                        app web / PWA (version téléphone)
+│   ├── index.html, style.css, app.js, comparaison.js, sw.js, manifest.webmanifest
+│   ├── preparer.py             prépare les mots pour le web (MP4 + points)
+│   ├── data/                   mots, vidéos MP4 et points des 20 mots de départ
+│   ├── lib/mediapipe/          MediaPipe Tasks Vision 0.10.21 (Apache 2.0)
+│   └── models/                 modèles MediaPipe mains + corps
 └── src/
     ├── main.py          écran d'accueil (Tkinter)
     ├── apprendre.py     mode Apprendre : interface, enregistrement, score
@@ -292,7 +349,8 @@ Les vidéos téléchargées (`src/refs/`) et ta progression (`src/progres.json`)
 ## Licences et crédits
 
 - **Code** : [GPL v3 ou ultérieure](LICENSE), comme le projet d'origine.
-- **Vidéos de référence** : elles ne sont pas incluses dans le dépôt ; elles sont téléchargées depuis la catégorie [Videos of French Sign Language](https://commons.wikimedia.org/wiki/Category:Videos_of_French_Sign_Language) de Wikimedia Commons. L'auteur et la licence de chaque vidéo sont affichés sous la vidéo pendant l'exercice, et listés par `python references.py --credits`. Les principales sources sont :
+- **MediaPipe** (`web/lib/mediapipe/`, `web/models/`) : Google, licence Apache 2.0.
+- **Vidéos de référence** : la version ordinateur ne les inclut pas dans le dépôt. La version téléphone embarque, dans `web/data/videos/`, les vidéos des 20 mots de départ converties en MP4, avec leurs crédits dans l'app (page « Aide et crédits »). Toutes viennent de la catégorie [Videos of French Sign Language](https://commons.wikimedia.org/wiki/Category:Videos_of_French_Sign_Language) de Wikimedia Commons. L'auteur et la licence de chaque vidéo sont affichés sous la vidéo pendant l'exercice, et listés par `python references.py --credits`. Les principales sources sont :
   - [Elix, le dictionnaire vivant en langue des signes](https://elix-lsf.fr/) (association Signes de sens) — CC BY-SA 4.0 ;
   - Laura Jauvert (montage : Edouard-lopez) — CC BY 3.0 ;
   - les contributeurs et contributrices de [Lingua Libre](https://lingualibre.org/) — CC0 ou CC BY.
