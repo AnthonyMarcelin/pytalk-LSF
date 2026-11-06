@@ -10,7 +10,7 @@ PyTalk filme ta webcam, repère tes mains et ton corps avec [MediaPipe](https://
 ![Mode Apprendre : le modèle à gauche, ton essai à droite, le score en bas](src/img/apprendre-resultat.png)
 <sub>Ici, « manger » a été signé à la place de « boire » : le score est mauvais. Vidéos : Laura Jauvert, montage Edouard-lopez, CC BY 3.0, Wikimedia Commons.</sub>
 
-> Projet d'origine : [EliotCassidy/PyTalk](https://github.com/EliotCassidy/PyTalk), créé par Eliot CASSIDY et Antonin JOUVE (1ère NSI) pour les [Trophées NSI](https://trophees-nsi.fr/) 2022, prix du meilleur projet de 1ère de la région PACA. Code sous licence [GPL v3+](LICENSE).
+> 🙏 Ce projet est une suite de **[EliotCassidy/PyTalk](https://github.com/EliotCassidy/PyTalk)**, créé par **Eliot CASSIDY et Antonin JOUVE** en 1ère NSI pour les [Trophées NSI](https://trophees-nsi.fr/) 2022, où il a remporté le prix du meilleur projet de 1ère de la région PACA. Toute la base vient d'eux : la détection avec MediaPipe, l'interface et le mode Reconnaître. Merci à eux ! Voir [Remerciements](#remerciements). Code sous licence [GPL v3+](LICENSE).
 
 ---
 
@@ -26,6 +26,7 @@ PyTalk filme ta webcam, repère tes mains et ton corps avec [MediaPipe](https://
 - [Dépannage](#dépannage)
 - [Structure du projet](#structure-du-projet)
 - [Licences et crédits](#licences-et-crédits)
+- [Remerciements](#remerciements)
 
 ---
 
@@ -296,4 +297,15 @@ Les vidéos téléchargées (`src/refs/`) et ta progression (`src/progres.json`)
   - Laura Jauvert (montage : Edouard-lopez) — CC BY 3.0 ;
   - les contributeurs et contributrices de [Lingua Libre](https://lingualibre.org/) — CC0 ou CC BY.
 - **Captures d'écran** de ce README : elles contiennent des images de vidéos de Laura Jauvert (CC BY 3.0, Wikimedia Commons).
-- **Projet d'origine** : Eliot CASSIDY et Antonin JOUVE, avec leurs remerciements aux organisateurs des Trophées NSI, à leurs professeurs de NSI et à leurs ami·es. [Vidéo de présentation](https://kodcast.com/w/tiPFati94gUxTJbSivMCnw).
+- **Projet d'origine** : [EliotCassidy/PyTalk](https://github.com/EliotCassidy/PyTalk), par Eliot CASSIDY et Antonin JOUVE — GPL v3+.
+
+---
+
+## Remerciements
+
+Un grand merci à **Eliot CASSIDY et Antonin JOUVE**, les auteurs de [PyTalk](https://github.com/EliotCassidy/PyTalk). Sans leur projet, celui-ci n'existerait pas. Ils ont eu l'idée de traduire la langue des signes en temps réel avec une simple webcam. Ils ont construit la détection des mains et du corps avec MediaPipe, entraîné le modèle de reconnaissance et conçu l'interface que ce dépôt réutilise. Ils l'ont fait en classe de 1ère, et leur travail a été récompensé aux Trophées NSI 2022. Leur [vidéo de présentation](https://kodcast.com/w/tiPFati94gUxTJbSivMCnw) vaut le détour.
+
+Merci aussi :
+- aux personnes qu'ils remerciaient eux-mêmes : les organisateurs des Trophées NSI, leurs professeurs de NSI et les ami·es qui leur ont fait des retours ;
+- à [Elix](https://elix-lsf.fr/), à Laura Jauvert et aux contributeurs et contributrices de [Lingua Libre](https://lingualibre.org/), qui ont publié des vidéos de LSF sous licence libre sur Wikimedia Commons : le mode Apprendre repose entièrement sur leur travail ;
+- à l'équipe de [MediaPipe](https://developers.google.com/mediapipe) (Google) pour la détection des mains et du corps.
