@@ -16,10 +16,13 @@ c4 = "#404558"
 c5 = "#2b2c35"
 
 def redirect_recognition():
-    os.system("python recognition.py ")
+    os.system(f"\"{sys.executable}\" recognition.py")
+
+def redirect_apprendre():
+    os.system(f"\"{sys.executable}\" apprendre.py")
 
 def redirect_training():
-    os.system("python recognition.py")
+    os.system(f"\"{sys.executable}\" recognition.py")
 
 def next_page():
     root.destroy()
@@ -43,7 +46,7 @@ frame = Frame(root, bg=c2)
 
 try:
     width, height = 431, 129
-    image = PhotoImage(file="img/pytalk.png")
+    image = PhotoImage(file="img/pytalk.PNG")
     canvas = Canvas(root, width=width, height=height, bg=c2, bd=0, highlightthickness=0)
     canvas.create_image(width/2, 129/2, image=image)
     canvas.pack(side=TOP)
@@ -75,6 +78,9 @@ except:
     print(f"{error} NO PROGRAM 'training.py' | Essayez d'éxécuter depuis le dossier 'src'")
     sys.exit(1)
 
+
+apprendre = Button(root, text="Apprendre la LSF", font=("Courrier", 24), bg=c4, fg=c2, activebackground=c2, activeforeground=c4, command=redirect_apprendre)
+apprendre.pack(pady=10)
 
 frame.pack(expand=YES)
 

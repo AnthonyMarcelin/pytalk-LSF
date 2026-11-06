@@ -1,6 +1,8 @@
 # PyTalk
 
 # Import des bibliothèques nécésaires
+import os
+os.environ.setdefault("TF_USE_LEGACY_KERAS", "1")  # action.h5 est un modèle Keras 2
 import cv2
 import numpy as np
 import os
@@ -144,7 +146,7 @@ print(accuracy_score(ytrue, yhat))
 """
 
 # * Si rien ne s'ouvre, modifiez la valeur 0 en 1,2,..(si vous avez des webcam virtuelles par exemples)
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(int(os.environ.get("PYTALK_CAMERA", "0")))
 
 
 # * Jouez avec %confidence variables pour +/- de stabilité

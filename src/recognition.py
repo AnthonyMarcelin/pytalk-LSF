@@ -1,6 +1,8 @@
 # PyTalk
 
 # Import des bibliothèques nécésaires
+import os
+os.environ.setdefault("TF_USE_LEGACY_KERAS", "1")  # action.h5 est un modèle Keras 2
 import sys
 import cv2
 import numpy as np
@@ -152,7 +154,7 @@ except:
     sys.exit(1)
 
 # * Si rien ne s'ouvre, modifiez la valeur 0 en 1,2,..(si vous avez des webcam virtuelles par exemples)
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(int(os.environ.get("PYTALK_CAMERA", "0")))
 
 sequence = []
 sentence = []
@@ -188,6 +190,9 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
 
         # Lire capture
         ret, frame = cap.read()
+        if not ret:  # caméra pas encore prête (ou accès refusé par macOS)
+            cv2.waitKey(100)
+            continue
 
         # Faire détections
         image, results = mediapipe_detection(frame, holistic)
@@ -198,8 +203,12 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
         # Prediction 
         keypoints = extract_keypoints(results)
 
-        sequence.append(keypoints)
-        sequence = sequence[-20:]
+        # Pas de main visible = pas de signe : on repart de zéro au lieu de deviner
+        if results.left_hand_landmarks or results.right_hand_landmarks:
+            sequence.append(keypoints)
+            sequence = sequence[-20:]
+        else:
+            sequence = []
         
         if len(sequence) == 20:
             res = new_model.predict(np.expand_dims(sequence, axis=0))[0]

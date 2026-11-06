@@ -1,0 +1,6 @@
+# Dépendances du seul mode « Apprendre » (sans TensorFlow).
+# Utile sur les Mac Intel, où TensorFlow 2.19 n'est pas disponible.
+mediapipe==0.10.21
+opencv-python
+numpy<2
+pillow
